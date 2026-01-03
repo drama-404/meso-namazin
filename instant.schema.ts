@@ -13,8 +13,13 @@ const _schema = i.schema({
       imageURL: i.string().optional(),
       type: i.string().optional(),
     }),
-    colors: i.entity({
-      value: i.string(),
+    // User preferences for prayer app settings
+    userPreferences: i.entity({
+      userId: i.string().unique().indexed(), 
+      gender: i.string(), // "male" or "female" - determines posture images
+      language: i.string(), // "sq" (Albanian) or "en" (English)
+      createdAt: i.number(), 
+      updatedAt: i.number(),
     }),
   },
   rooms: {},
