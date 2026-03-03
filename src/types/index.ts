@@ -19,7 +19,7 @@ export interface TextSegment {
   arabic: string;
   transliteration: string;
   translation_sq: string;
-  audio_url?: string;
+  audio_key?: string | null;
 }
 
 export interface PrayerStep {

@@ -16,10 +16,10 @@ export default function SurahSwitcher({ selectedSurahId, onSelect }: SurahSwitch
           <button
             key={surah.id}
             onClick={() => onSelect(surah.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`px-3 py-1.5 rounded-full text-[12px] font-medium whitespace-nowrap transition-all active:scale-[0.97] ${
               isSelected
-                ? 'bg-primary text-white'
-                : 'bg-surface-alt text-text-secondary hover:bg-border'
+                ? 'bg-[#1B7A4A] text-white'
+                : 'bg-[#EFEFF4] text-[#6C6C70]'
             }`}
           >
             {surah.title_sq}

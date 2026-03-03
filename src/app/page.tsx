@@ -1,5 +1,6 @@
 'use client';
 
+import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/contexts/AppContext';
 import Header from '@/components/layout/Header';
 import BottomNav from '@/components/layout/BottomNav';
@@ -14,14 +15,28 @@ import Onboarding from '@/components/onboarding/Onboarding';
 export default function Home() {
   const { state } = useApp();
 
+  const tabContent: Record<string, React.ReactNode> = {
+    sot: <SotTab />,
+    meso: <MesoTab />,
+    duate: <DuateTab />,
+  };
+
   return (
-    <div className="min-h-dvh bg-background">
+    <div className="min-h-dvh bg-[#F2F2F7]">
       <Header />
 
-      <main className="pt-14 pb-16 scrollbar-hide">
-        {state.activeTab === 'sot' && <SotTab />}
-        {state.activeTab === 'meso' && <MesoTab />}
-        {state.activeTab === 'duate' && <DuateTab />}
+      <main className="pt-12 pb-14 scrollbar-hide max-w-[480px] mx-auto">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={state.activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
+            {tabContent[state.activeTab]}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <BottomNav />

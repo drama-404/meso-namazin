@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import type { DhikrItem } from '@/types';
 
@@ -18,7 +19,6 @@ export default function DhikrCounter({ item, onComplete }: DhikrCounterProps) {
     if (isComplete) return;
     const next = count + 1;
     setCount(next);
-    // Haptic feedback
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       navigator.vibrate(15);
     }
@@ -34,15 +34,15 @@ export default function DhikrCounter({ item, onComplete }: DhikrCounterProps) {
   const segment = item.text_segments[0];
 
   return (
-    <div className="bg-surface rounded-2xl border border-border p-4">
+    <div className="bg-white rounded-2xl card-shadow p-4">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="font-semibold text-foreground">{item.title_sq}</h3>
-          <p className="text-xs text-text-muted">{item.instruction_sq}</p>
+          <h3 className="font-semibold text-[#1C1C1E]">{item.title_sq}</h3>
+          <p className="text-[12px] text-[#AEAEB2]">{item.instruction_sq}</p>
         </div>
         {count > 0 && (
-          <button onClick={handleReset} className="p-1.5 text-text-muted hover:text-text-secondary">
-            <RotateCcw className="w-4 h-4" />
+          <button onClick={handleReset} className="p-1.5 text-[#AEAEB2] active:scale-[0.97] transition-transform">
+            <RotateCcw size={16} strokeWidth={1.5} />
           </button>
         )}
       </div>
@@ -50,26 +50,28 @@ export default function DhikrCounter({ item, onComplete }: DhikrCounterProps) {
       {/* Arabic + transliteration */}
       <div className="mb-4 text-center">
         {segment.arabic && (
-          <p className="arabic-text text-2xl text-foreground mb-1">{segment.arabic}</p>
+          <p className="arabic-text text-2xl text-[#1C1C1E] mb-1">{segment.arabic}</p>
         )}
-        <p className="text-sm text-text-secondary">{segment.transliteration}</p>
-        <p className="text-xs text-text-muted italic mt-0.5">{segment.translation_sq}</p>
+        <p className="text-[14px] text-[#6C6C70]">{segment.transliteration}</p>
+        <p className="text-[12px] text-[#AEAEB2] italic mt-0.5">{segment.translation_sq}</p>
       </div>
 
       {/* Tap counter */}
-      <button
+      <motion.button
         onClick={handleTap}
         disabled={isComplete}
-        className={`w-full relative overflow-hidden rounded-xl py-6 transition-all active:scale-[0.98] ${
+        whileTap={{ scale: 0.94 }}
+        transition={{ type: 'spring', stiffness: 600, damping: 20 }}
+        className={`w-full relative overflow-hidden rounded-2xl py-6 transition-all ${
           isComplete
-            ? 'bg-primary/10 text-primary'
-            : 'bg-primary text-white'
+            ? 'bg-[#E8F5EE] text-[#1B7A4A]'
+            : 'bg-[#1B7A4A] text-white'
         }`}
       >
         {/* Progress bar background */}
         {!isComplete && (
           <div
-            className="absolute inset-0 bg-primary-dark/30 transition-all duration-200"
+            className="absolute inset-0 bg-[#15613B]/30 transition-all duration-200"
             style={{ width: `${progress * 100}%` }}
           />
         )}
@@ -77,11 +79,11 @@ export default function DhikrCounter({ item, onComplete }: DhikrCounterProps) {
           <span className="text-3xl font-bold tabular-nums">
             {count}
           </span>
-          <span className="text-sm opacity-80">
+          <span className="text-[14px] opacity-80">
             {isComplete ? 'Përfunduar!' : `nga ${item.repeat}`}
           </span>
         </div>
-      </button>
+      </motion.button>
     </div>
   );
 }
