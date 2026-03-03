@@ -1,0 +1,23 @@
+{
+  "name": "Mëso Namazin",
+  "short_name": "Mëso Namazin",
+  "description": "Mëso si të falësh namazin hap pas hapi. Aplikacion falas për komunitetin shqiptar.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF7",
+  "theme_color": "#1B7A4A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

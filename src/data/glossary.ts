@@ -1,0 +1,25 @@
+import type { GlossaryEntry } from '@/types';
+
+export const GLOSSARY: GlossaryEntry[] = [
+  { term: 'Abdes (Vudu)', definition_sq: 'Larja rituale para namazit. Përfshin larjen e duarve, fytyrës, krahëve dhe këmbëve.' },
+  { term: 'Dhikr', definition_sq: 'Përmendja e Allahut. Fjalë lavdërimi dhe lutjeje që thuhen pas namazit ose në çdo kohë.' },
+  { term: 'Dua', definition_sq: 'Lutje personale drejtuar Allahut. Mund të bëhet në çdo gjuhë dhe çdo kohë.' },
+  { term: 'Ettehijatu', definition_sq: 'Lutja që lexohet në uljen e fundit (dhe të mesit) të namazit. Quhet edhe Tesheh-hud.' },
+  { term: 'Farz (Fard)', definition_sq: 'Detyrim fetar. Namazet farz janë 5 në ditë dhe janë të detyrueshme për çdo mysliman.' },
+  { term: 'Haxh', definition_sq: 'Pelegrinazhi në Mekë. Një nga 5 shtyllat e Islamit, i detyrueshëm një herë në jetë nëse ke mundësi.' },
+  { term: 'Iftar', definition_sq: 'Çelja e agjërimit në perëndim të diellit gjatë Ramazanit.' },
+  { term: 'Imam', definition_sq: 'Personi që udhëheq namazin në grup (xhema\'at).' },
+  { term: 'Kibla', definition_sq: 'Drejtimi i Ka\'bes në Mekë. Myslimanët falen duke u drejtuar nga Kibla.' },
+  { term: 'Kijam', definition_sq: 'Qëndrimi në këmbë gjatë namazit. Pozicioni kur lexohet Fatiha dhe suret.' },
+  { term: 'Ramazan', definition_sq: 'Muaji i 9-të i kalendarit islam. Muaji i agjërimit, lutjes dhe Kuranit.' },
+  { term: 'Rekat (Rakat)', definition_sq: 'Një cikël i plotë i namazit: qëndrim, përkulje, sexhde. Çdo namaz ka numër të caktuar rekatesh.' },
+  { term: 'Ruku', definition_sq: 'Përkulja gjatë namazit. Duart vendosen mbi gjunjë, shpina e drejtë.' },
+  { term: 'Selam', definition_sq: 'Përshëndetja që mbyll namazin. Kthehesh djathtas pastaj majtas duke thënë \'Es-selamu alejkum\'.' },
+  { term: 'Sexhde (Suxhud)', definition_sq: 'Gjunjëzimi/përulësia me ballë në tokë. Pozicioni më i afërt me Allahun.' },
+  { term: 'Sunnet', definition_sq: 'Praktikë e Profetit Muhamed ﷺ. Namazet sunnet janë vullnetare por shumë të rekomanduara.' },
+  { term: 'Sure', definition_sq: 'Kapitull i Kuranit. Kurani ka 114 sure.' },
+  { term: 'Syfyr', definition_sq: 'Vakti para agimit në Ramazan. Koha e fundit për të ngrënë para fillimit të agjërimit.' },
+  { term: 'Tekbir', definition_sq: 'Thënia \'Allahu Ekber\' (Allahu është më i Madhi). Thuhet kur ndërrohen pozicionet në namaz.' },
+  { term: 'Xhema\'at', definition_sq: 'Namazi në grup, i udhëhequr nga një imam. Ka shpërblim më të madh se namazi individual.' },
+  { term: 'Zekat', definition_sq: 'Lëmosha e detyrueshme. Një nga 5 shtyllat e Islamit, jepet një herë në vit.' },
+];
