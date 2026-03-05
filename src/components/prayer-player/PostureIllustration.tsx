@@ -39,15 +39,16 @@ export default function PostureIllustration({ type, gender = 'male' }: { type: s
   const filename = gender === 'female' ? entry.female : entry.male;
 
   return (
-    <div className="relative w-full h-52 rounded-2xl overflow-hidden bg-[#F2F2F7]">
+    <div className="relative w-full h-48 flex items-center justify-center overflow-visible">
       {hasError ? (
         <FallbackSilhouette />
       ) : (
         <Image
           src={`/illustrations/man/${filename}`}
           alt={type}
-          fill
-          className="object-contain p-4"
+          width={200}
+          height={200}
+          className="object-contain max-h-48"
           onError={() => setHasError(true)}
           priority={false}
         />

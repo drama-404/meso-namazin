@@ -31,6 +31,7 @@ export interface PrayerStep {
   instruction_sq: string;
   text_segments: TextSegment[];
   repeat?: number;
+  repeat_from_segment?: number; // segments before this index play once, segments from this index repeat
   has_surah_switcher?: boolean;
   is_quran?: boolean;
   surah_number?: number;

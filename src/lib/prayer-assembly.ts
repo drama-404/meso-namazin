@@ -1,7 +1,15 @@
-import type { PrayerStep, PrayerId } from '@/types';
+import type { PrayerStep, PrayerId, TextSegment } from '@/types';
 import { PRAYER_COMPONENTS } from '@/data/prayers';
 import { SURAHS } from '@/data/surahs';
 import { PRAYERS } from '@/lib/constants';
+
+// Takbir segment to prepend to transition steps (ruku, sujud, sitting between sujuds)
+const TAKBIR_SEGMENT: TextSegment = {
+  arabic: 'اللَّهُ أَكْبَرُ',
+  transliteration: 'Allahu Ekber',
+  translation_sq: 'Allahu është më i Madhi!',
+  audio_key: '01-Allahu Ekber.MP3',
+};
 
 function makeStep(
   componentId: string,
@@ -23,6 +31,18 @@ function makeStep(
     is_quran: component.is_quran,
     surah_number: component.surah_number,
     ...overrides,
+  };
+}
+
+/**
+ * Prepend a takbir segment to a step's text_segments.
+ * Used for transitions (ruku, sujud, sitting_between) where "Allahu Ekber" is said.
+ */
+function withTakbir(step: PrayerStep): PrayerStep {
+  return {
+    ...step,
+    text_segments: [TAKBIR_SEGMENT, ...step.text_segments],
+    repeat_from_segment: 1, // takbir plays once, dhikr segments repeat
   };
 }
 
@@ -70,7 +90,7 @@ export function assemblePrayer(prayerId: PrayerId): {
 
     // Fatiha (every rakat)
     steps.push(makeStep('fatiha', rakat, order++, {
-      title_sq: `Surja Fatiha (Rekati i ${rakat === 1 ? '1-rë' : rakat === 2 ? '2-të' : rakat === 3 ? '3-të' : '4-rt'})`,
+      title_sq: 'Surja Fatiha',
     }));
 
     // Short surah only in first 2 rakats
@@ -82,27 +102,27 @@ export function assemblePrayer(prayerId: PrayerId): {
       }));
     }
 
-    // === RUKU ===
-    steps.push(makeStep('ruku', rakat, order++, {
-      title_sq: `Rukuja (Rekati i ${rakat === 1 ? '1-rë' : rakat === 2 ? '2-të' : rakat === 3 ? '3-të' : '4-rt'})`,
-    }));
+    // === RUKU === (prepend takbir segment)
+    steps.push(withTakbir(makeStep('ruku', rakat, order++, {
+      title_sq: 'Rukuja',
+    })));
 
     // Rising from Ruku
     steps.push(makeStep('rising_from_ruku', rakat, order++));
 
-    // === FIRST SUJUD ===
-    steps.push(makeStep('sujud', rakat, order++, {
-      title_sq: `Sexhdja e 1-rë (Rekati i ${rakat === 1 ? '1-rë' : rakat === 2 ? '2-të' : rakat === 3 ? '3-të' : '4-rt'})`,
-    }));
+    // === FIRST SUJUD === (prepend takbir segment)
+    steps.push(withTakbir(makeStep('sujud', rakat, order++, {
+      title_sq: 'Sexhdja e 1-rë',
+    })));
 
-    // Sitting between sujuds
-    steps.push(makeStep('sitting_between_sujud', rakat, order++));
+    // Sitting between sujuds (prepend takbir segment for rising)
+    steps.push(withTakbir(makeStep('sitting_between_sujud', rakat, order++)));
 
-    // === SECOND SUJUD ===
-    steps.push(makeStep('sujud', rakat, order++, {
+    // === SECOND SUJUD === (prepend takbir segment)
+    steps.push(withTakbir(makeStep('sujud', rakat, order++, {
       id: `sujud2_r${rakat}_${order}`,
-      title_sq: `Sexhdja e 2-të (Rekati i ${rakat === 1 ? '1-rë' : rakat === 2 ? '2-të' : rakat === 3 ? '3-të' : '4-rt'})`,
-    }));
+      title_sq: 'Sexhdja e 2-të',
+    })));
 
     // === AFTER RAKAT DECISIONS ===
 

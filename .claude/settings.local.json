@@ -4,7 +4,9 @@
       "WebFetch(domain:alquran.cloud)",
       "WebFetch(domain:api.alquran.cloud)",
       "Bash(npx next build)",
-      "Bash(timeout 15 npx next dev --port 3000)"
+      "Bash(timeout 15 npx next dev --port 3000)",
+      "Bash(grep -n \"activeSegmentIndex\\\\|segment-active\" /c/Users/Denada/Desktop/projects/meso-namazin/src/components/prayer-player/*.tsx)",
+      "Bash(npm run build)"
     ]
   }
 }

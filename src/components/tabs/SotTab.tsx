@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { Play, Check, MapPin, Lightbulb } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { usePrayerTimes } from '@/hooks/usePrayerTimes';
-import { useCountdown, formatCountdown } from '@/hooks/useCountdown';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { PRAYERS, ALBANIAN_MONTHS, DAILY_TIPS } from '@/lib/constants';
 import type { PrayerId, DailyProgress } from '@/types';
@@ -12,7 +11,6 @@ import type { PrayerId, DailyProgress } from '@/types';
 export default function SotTab() {
   const { state, dispatch } = useApp();
   const { entries, nextPrayer, tomorrowFajr, now } = usePrayerTimes();
-  const countdown = useCountdown(nextPrayer?.time ?? null);
 
   const todayKey = now.toISOString().split('T')[0];
   const [progress] = useLocalStorage<DailyProgress>(
@@ -46,59 +44,33 @@ export default function SotTab() {
         <span>{dateStr}</span>
       </div>
 
-      {/* Next Prayer Hero Card */}
-      <div
-        className="rounded-2xl p-5 text-white relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #1B7A4A 0%, #2A9D5C 100%)' }}
-      >
-        {/* Subtle decorative watermark */}
-        <svg
-          className="absolute top-3 right-3 opacity-[0.08]"
-          width="80"
-          height="80"
-          viewBox="0 0 80 80"
-          fill="none"
-        >
-          <circle cx="40" cy="40" r="36" stroke="white" strokeWidth="2" />
-          <path d="M40 8 C40 8, 56 24, 56 40 C56 56, 40 72, 40 72 C40 72, 24 56, 24 40 C24 24, 40 8, 40 8Z" stroke="white" strokeWidth="1.5" />
-          <circle cx="40" cy="18" r="4" fill="white" />
-        </svg>
-
+      {/* Next Prayer Banner */}
+      <div className="rounded-2xl px-4 py-3 bg-[#EDF7F1]">
         {nextPrayer ? (
-          <>
-            <p className="text-xs uppercase tracking-[0.08em] text-white/70 mb-1.5 font-medium">
-              Namazi i Radhës
-            </p>
-            <div className="flex items-baseline justify-between mb-1">
-              <h2 className="text-3xl font-bold tracking-tight">{PRAYERS[nextPrayer.id].name_sq}</h2>
-              <span className="text-xl text-white/90 font-semibold tabular-nums">
-                {entries.find(e => e.id === nextPrayer.id)?.timeFormatted}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="text-[13px] text-[#6C6C70] flex-shrink-0">Namazi i Radhës:</span>
+              <span className="text-[15px] font-semibold text-[#1B7A4A] truncate">
+                {PRAYERS[nextPrayer.id].name_sq}
+              </span>
+              <span className="text-[13px] text-[#6C6C70] tabular-nums flex-shrink-0">
+                — {entries.find(e => e.id === nextPrayer.id)?.timeFormatted}
               </span>
             </div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white/20">
-                {PRAYERS[nextPrayer.id].total_rakats} Rekate
-              </span>
-            </div>
-            <p className="text-sm text-white/70 mb-4">
-              {formatCountdown(countdown.hours, countdown.minutes)}
-            </p>
             <button
               onClick={() => handleStartPrayer(nextPrayer.id)}
-              className="w-full flex items-center justify-center gap-2 bg-white text-[#1B7A4A] font-bold py-3 rounded-xl active:scale-[0.97] transition-transform h-12"
+              className="flex items-center gap-1 bg-[#1B7A4A] text-white text-[13px] font-semibold px-3.5 py-2 rounded-xl active:scale-[0.97] transition-transform flex-shrink-0 ml-2"
             >
-              <Play size={16} strokeWidth={2} fill="currentColor" />
-              Fillo Praktikën
+              <Play size={13} strokeWidth={2} fill="currentColor" />
+              Fillo
             </button>
-          </>
+          </div>
         ) : (
-          <div className="text-center py-3">
-            <p className="text-xs uppercase tracking-[0.08em] text-white/70 mb-2 font-medium">
-              Namazi i radhës nesër
-            </p>
-            <h2 className="text-xl font-bold">
+          <div className="flex items-center justify-center gap-1.5 py-0.5">
+            <span className="text-[13px] text-[#6C6C70]">Namazi i radhës nesër:</span>
+            <span className="text-[15px] font-semibold text-[#1B7A4A]">
               Agimi — {tomorrowFajr?.timeFormatted}
-            </h2>
+            </span>
           </div>
         )}
       </div>

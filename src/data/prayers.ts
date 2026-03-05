@@ -237,9 +237,9 @@ export const PRAYER_COMPONENTS: Record<string, PrayerComponent> = {
   sitting_between_sujud: {
     id: 'sitting_between_sujud',
     title_sq: 'Ulja midis dy Sexhdeve',
-    instruction_sq: 'Ngritu nga sexhdja dhe ulu mbi këmbën e majtë. Thuaj \'Rabbigfirli\' (3 herë).',
+    instruction_sq: 'Ngritu nga sexhdja dhe ulu mbi këmbën e majtë. Thuaj \'Rabbigfirli\' (2 herë).',
     type: 'sitting',
-    repeat: 3,
+    repeat: 2,
     text_segments: [
       {
         arabic: 'رَبِّ اغْفِرْ لِي',

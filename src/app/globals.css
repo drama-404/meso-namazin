@@ -24,6 +24,10 @@
   --success: #34C759;
   --blue-highlight: #007AFF;
   --accent-warm: #D4A574;
+
+  /* Step headers (prayer player) */
+  --step-header-bg: #EDF7F1;
+  --step-header-border: #1B7A4A;
 }
 
 @theme inline {
@@ -93,8 +97,8 @@ body {
 
 /* Karaoke active segment */
 .segment-active {
-  border-left: 2px solid var(--blue-highlight);
+  border-left: 3px solid var(--blue-highlight);
   padding-left: 12px;
-  background: rgba(0, 122, 255, 0.06);
+  background: rgba(0, 122, 255, 0.04);
   border-radius: 0 8px 8px 0;
 }
