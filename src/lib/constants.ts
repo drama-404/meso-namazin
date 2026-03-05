@@ -11,7 +11,7 @@ export const MECCA_LNG = 39.8262;
 
 // Prayer definitions
 export const PRAYERS: Record<PrayerId, { name_sq: string; name_ar: string; total_rakats: number; short_label: string }> = {
-  fajr:    { name_sq: 'Agimi',    name_ar: 'صلاة الفجر',   total_rakats: 2, short_label: '2 rek' },
+  fajr:    { name_sq: 'Sabahu',    name_ar: 'صلاة الفجر',   total_rakats: 2, short_label: '2 rek' },
   dhuhr:   { name_sq: 'Dreka',    name_ar: 'صلاة الظهر',   total_rakats: 4, short_label: '4 rek' },
   asr:     { name_sq: 'Ikindia',  name_ar: 'صلاة العصر',   total_rakats: 4, short_label: '4 rek' },
   maghrib: { name_sq: 'Akshami',  name_ar: 'صلاة المغرب',  total_rakats: 3, short_label: '3 rek' },
@@ -34,5 +34,5 @@ export const DAILY_TIPS = [
   'Dije se: Abdesi (larja para namazit) është kusht — pa abdes nuk falet namazi.',
   'Këshillë: Praktiko namazin me zë — kjo ndihmon në memorizim.',
   'Dije se: Sexhdja është momenti kur je më afër Allahut — lutu me zemër.',
-  'Këshillë: Fillo me namazin e Agimit — ka vetëm 2 rekate dhe është i lehtë për tu mësuar.',
+  'Këshillë: Fillo me namazin e Sabahut — ka vetëm 2 rekate dhe është i lehtë për tu mësuar.',
 ];

@@ -6,11 +6,22 @@ import { useApp } from '@/contexts/AppContext';
 import { usePrayerTimes } from '@/hooks/usePrayerTimes';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { PRAYERS, ALBANIAN_MONTHS, DAILY_TIPS } from '@/lib/constants';
+import { formatTime } from '@/lib/prayer-times';
+import SunArcChart from '@/components/sot/SunArcChart';
 import type { PrayerId, DailyProgress } from '@/types';
+
+function formatRemaining(minutes: number): string {
+  if (minutes >= 60) {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m > 0 ? `${h}h ${m}min` : `${h}h`;
+  }
+  return `${minutes}min`;
+}
 
 export default function SotTab() {
   const { state, dispatch } = useApp();
-  const { entries, nextPrayer, tomorrowFajr, now } = usePrayerTimes();
+  const { entries, tomorrowFajr, now, times, currentWindow } = usePrayerTimes();
 
   const todayKey = now.toISOString().split('T')[0];
   const [progress] = useLocalStorage<DailyProgress>(
@@ -29,6 +40,20 @@ export default function SotTab() {
   const dailyTip = DAILY_TIPS[now.getDate() % DAILY_TIPS.length];
   const practicedCount = currentProgress.practiced.length;
 
+  // Determine current prayer for active row highlighting
+  const currentPrayerId = currentWindow && !currentWindow.isGap ? currentWindow.prayer : null;
+
+  // Tomorrow fajr date for chart
+  const tomorrowFajrDate = useMemo(() => {
+    if (tomorrowFajr) return tomorrowFajr.time;
+    // Calculate it ourselves when tomorrowFajr is null (before isha)
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    // We need to import getPrayerTimes but it's already used in hook
+    // Just pass undefined — chart handles fallback
+    return undefined;
+  }, [tomorrowFajr, now]);
+
   function handleStartPrayer(prayerId: PrayerId) {
     dispatch({ type: 'OPEN_PRAYER_PLAYER', prayerId });
   }
@@ -44,32 +69,78 @@ export default function SotTab() {
         <span>{dateStr}</span>
       </div>
 
-      {/* Next Prayer Banner */}
-      <div className="rounded-2xl px-4 py-3 bg-[#EDF7F1]">
-        {nextPrayer ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-[13px] text-[#6C6C70] flex-shrink-0">Namazi i Radhës:</span>
-              <span className="text-[15px] font-semibold text-[#1B7A4A] truncate">
-                {PRAYERS[nextPrayer.id].name_sq}
-              </span>
-              <span className="text-[13px] text-[#6C6C70] tabular-nums flex-shrink-0">
-                — {entries.find(e => e.id === nextPrayer.id)?.timeFormatted}
-              </span>
+      {/* Hero Banner */}
+      <div className="bg-white rounded-2xl card-shadow overflow-hidden">
+        {currentWindow ? (
+          <div className="p-4 pb-2">
+            {/* Top row: prayer info + button */}
+            {currentWindow.isGap ? (
+              <div className="flex items-center justify-between mb-1">
+                <div>
+                  <p className="text-[12px] text-[#6C6C70] uppercase tracking-wider">Koha e ardhshme</p>
+                  <p className="text-[18px] font-bold text-[#1C1C1E] tracking-[-0.02em]">
+                    {PRAYERS[currentWindow.gapNextPrayer || 'dhuhr'].name_sq}
+                  </p>
+                </div>
+                <span className="text-[12px] font-medium text-[#6C6C70] bg-[#F2F2F7] px-2.5 py-1 rounded-full">
+                  Fillon në {currentWindow.gapNextTime ? formatTime(currentWindow.gapNextTime) : ''}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2.5">
+                  <div>
+                    <p className="text-[12px] text-[#6C6C70] uppercase tracking-wider">Namazi aktual</p>
+                    <p className="text-[18px] font-bold text-[#1C1C1E] tracking-[-0.02em] leading-tight">
+                      {PRAYERS[currentWindow.prayer].name_sq}
+                    </p>
+                  </div>
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                    currentWindow.isAsr && currentWindow.minutesRemaining <= 30
+                      ? 'bg-[#FFF3E0] text-[#FF9500]'
+                      : 'bg-[#E8F5EE] text-[#1B7A4A]'
+                  }`}>
+                    {formatRemaining(currentWindow.minutesRemaining)}
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleStartPrayer(currentWindow.prayer)}
+                  className="flex items-center gap-1.5 bg-[#1B7A4A] text-white text-[13px] font-semibold px-3.5 py-2 rounded-xl active:scale-[0.97] transition-transform"
+                >
+                  <Play size={12} strokeWidth={2.5} fill="currentColor" />
+                  Fillo
+                </button>
+              </div>
+            )}
+            {!currentWindow.isGap && (
+              <div className="flex items-center gap-1.5">
+                <p className="text-[12px] text-[#6C6C70]">
+                  {formatTime(currentWindow.windowStart)} – {formatTime(currentWindow.windowEnd)}
+                </p>
+                {currentWindow.isAsr && currentWindow.minutesRemaining <= 30 && (
+                  <span className="text-[11px] text-[#FF9500] italic">
+                    · Mos e shtyj
+                  </span>
+                )}
+              </div>
+            )}
+            {/* Sun arc chart */}
+            <div className="h-[90px] mt-1 -mx-1">
+              {times && (
+                <SunArcChart
+                  prayerTimes={times}
+                  now={now}
+                  tomorrowFajr={tomorrowFajrDate}
+                />
+              )}
             </div>
-            <button
-              onClick={() => handleStartPrayer(nextPrayer.id)}
-              className="flex items-center gap-1 bg-[#1B7A4A] text-white text-[13px] font-semibold px-3.5 py-2 rounded-xl active:scale-[0.97] transition-transform flex-shrink-0 ml-2"
-            >
-              <Play size={13} strokeWidth={2} fill="currentColor" />
-              Fillo
-            </button>
           </div>
         ) : (
-          <div className="flex items-center justify-center gap-1.5 py-0.5">
+          /* After midnight / before fajr — show tomorrow's fajr */
+          <div className="flex items-center justify-center gap-2 px-5 py-6">
             <span className="text-[13px] text-[#6C6C70]">Namazi i radhës nesër:</span>
-            <span className="text-[15px] font-semibold text-[#1B7A4A]">
-              Agimi — {tomorrowFajr?.timeFormatted}
+            <span className="text-[16px] font-semibold text-[#1B7A4A]">
+              Sabahu — {tomorrowFajr?.timeFormatted}
             </span>
           </div>
         )}
@@ -83,38 +154,36 @@ export default function SotTab() {
         <div className="bg-white rounded-2xl card-shadow overflow-hidden">
           {entries.map((entry, i) => {
             const isPracticed = currentProgress.practiced.includes(entry.id);
-            const isActive = entry.isNext;
-            const isPast = entry.isPassed && !entry.isNext;
+            const isCurrent = entry.id === currentPrayerId;
+            const isPast = !isCurrent && entry.isPassed;
             return (
               <button
                 key={entry.id}
                 onClick={() => handleStartPrayer(entry.id)}
-                className={`w-full flex items-center justify-between px-4 py-3.5 text-left active:bg-[#F2F2F7] transition-colors ${
-                  i < entries.length - 1 ? 'border-b border-[rgba(0,0,0,0.06)]' : ''
-                }`}
+                className={`w-full flex items-center justify-between px-4 min-h-[52px] text-left transition-colors ${
+                  isCurrent
+                    ? 'bg-[#E8F5EE] border-l-2 border-[#1B7A4A] active:bg-[#D9EFDF]'
+                    : 'active:bg-[#F2F2F7]'
+                } ${i < entries.length - 1 ? 'border-b border-[rgba(0,0,0,0.06)]' : ''}`}
               >
                 <div className="flex items-center gap-3">
-                  {isActive ? (
-                    <div className="w-2 h-2 rounded-full bg-[#1B7A4A] flex-shrink-0" />
-                  ) : (
-                    <div className="w-2 h-2 rounded-full flex-shrink-0" />
-                  )}
                   <span className={`text-[15px] ${
-                    isActive ? 'font-semibold text-[#1B7A4A]' :
-                    isPast ? 'text-[#AEAEB2] font-normal' : 'text-[#1C1C1E] font-normal'
+                    isCurrent ? 'font-semibold text-[#1B7A4A]' :
+                    isPast ? 'text-[#AEAEB2]' : 'text-[#1C1C1E] font-medium'
                   }`}>
                     {entry.name_sq}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className={`text-[13px] font-medium ${
-                    isPast ? 'text-[#AEAEB2]' : 'text-[#6C6C70]'
+                  <span className={`text-[13px] ${
+                    isCurrent ? 'font-medium text-[#1B7A4A]' :
+                    isPast ? 'text-[#AEAEB2]' : 'text-[#6C6C70] font-medium'
                   }`}>
                     {entry.short_label}
                   </span>
                   <span className={`text-[15px] tabular-nums ${
-                    isActive ? 'font-semibold text-[#1B7A4A]' :
-                    isPast ? 'text-[#AEAEB2]' : 'text-[#1C1C1E]'
+                    isCurrent ? 'font-semibold text-[#1B7A4A]' :
+                    isPast ? 'text-[#AEAEB2]' : 'text-[#1C1C1E] font-medium'
                   }`}>
                     {entry.timeFormatted}
                   </span>

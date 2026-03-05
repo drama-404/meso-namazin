@@ -348,7 +348,7 @@ All strings live in `src/lib/constants.ts` under `UI_STRINGS`. Never hardcode Al
 
 Key labels:
 - Tabs: Sot / Mëso / Duatë
-- Prayer names: Agimi / Dreka / Ikindia / Akshami / Jacia
+- Prayer names: Sabahu / Dreka / Ikindia / Akshami / Jacia
 - Player modes: Dëgjo / Praktiko
 - CTA: "Fillo Praktikën" / "Hapi Tjetër" / "Kthehu në Kryefaqe"
 - Completion: "Allahu e pranoftë namazin tënd!"

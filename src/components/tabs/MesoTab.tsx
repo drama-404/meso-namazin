@@ -139,7 +139,7 @@ function LessonDetail({
           className="mt-6 w-full flex items-center justify-center gap-2 bg-[#1B7A4A] text-white font-bold py-3.5 rounded-2xl active:scale-[0.97] transition-transform h-14"
         >
           <Play size={16} strokeWidth={2} fill="currentColor" />
-          Provo Namazin e Agimit (2 Rekate)
+          Provo Namazin e Sabahut (2 Rekate)
         </button>
       )}
     </div>

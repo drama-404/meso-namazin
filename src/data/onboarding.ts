@@ -28,6 +28,6 @@ export const ONBOARDING_CARDS = [
     id: 'ready',
     icon: 'CheckCircle2',
     title_sq: 'Je gati!',
-    description_sq: 'Fillo me namazin e parë — Agimin (vetëm 2 rekate). Mos u shqetëso nëse gabon, çdo praktikë të afron më shumë.',
+    description_sq: 'Fillo me namazin e parë — Sabahun (vetëm 2 rekate). Mos u shqetëso nëse gabon, çdo praktikë të afron më shumë.',
   },
 ];

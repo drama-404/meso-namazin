@@ -67,8 +67,8 @@ export const LESSON_CONTENT: Record<string, { title_sq: string; paragraphs: stri
     title_sq: 'Hapat e Namazit',
     paragraphs: [
       'Çdo namaz përbëhet nga njësi që quhen "rekate". Një rekat përfshin: qëndrimin në këmbë (kijam), përkuljen (ruku), sexhden, dhe uljen.',
-      'Numri i rekateve ndryshon sipas namazit: Agimi ka 2, Dreka ka 4, Ikindia ka 4, Akshami ka 3, dhe Jacia ka 4 rekate.',
-      'Kur je gati, provo namazin e parë: Agimi (2 rekate) — është më i shkurtri dhe më i lehti për tu mësuar!',
+      'Numri i rekateve ndryshon sipas namazit: Sabahu ka 2, Dreka ka 4, Ikindia ka 4, Akshami ka 3, dhe Jacia ka 4 rekate.',
+      'Kur je gati, provo namazin e parë: Sabahu (2 rekate) — është më i shkurtri dhe më i lehti për tu mësuar!',
     ],
   },
 };

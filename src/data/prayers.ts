@@ -30,7 +30,7 @@ export const PRAYER_COMPONENTS: Record<string, PrayerComponent> = {
 
   takbir_iftitah: {
     id: 'takbir_iftitah',
-    title_sq: 'Tekbiri Fillestar (Tekbiratul Ihram)',
+    title_sq: 'Tekbiri Fillestar',
     instruction_sq: 'Ngriti duart në lartësinë e veshëve (meshkujt) ose në lartësinë e supeve (femrat), dhe thuaj \'Allahu Ekber\'.',
     type: 'standing_hands_raised',
     text_segments: [

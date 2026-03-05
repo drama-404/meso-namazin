@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useApp } from '@/contexts/AppContext';
-import { getPrayerTimes, getNextPrayerInfo, formatTime } from '@/lib/prayer-times';
+import { getPrayerTimes, getNextPrayerInfo, getCurrentPrayerWindow, formatTime } from '@/lib/prayer-times';
+import type { PrayerWindow } from '@/lib/prayer-times';
 import { PRAYER_ORDER, PRAYERS } from '@/lib/constants';
 import type { PrayerId } from '@/types';
 
@@ -55,22 +56,32 @@ export function usePrayerTimes() {
     });
   }, [times, nextPrayer, now]);
 
-  // Tomorrow's Fajr (for display after Isha)
-  const tomorrowFajr = useMemo(() => {
-    if (nextPrayer) return null;
+  // Tomorrow's Fajr
+  const tomorrowTimes = useMemo(() => {
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowTimes = getPrayerTimes(locationLat, locationLng, tomorrow);
+    return getPrayerTimes(locationLat, locationLng, tomorrow);
+  }, [locationLat, locationLng, now.toDateString()]);
+
+  const tomorrowFajr = useMemo(() => {
+    if (nextPrayer) return null;
     return {
       time: tomorrowTimes.fajr,
       timeFormatted: formatTime(tomorrowTimes.fajr),
     };
-  }, [nextPrayer, locationLat, locationLng, now]);
+  }, [nextPrayer, tomorrowTimes]);
+
+  const currentWindow = useMemo(
+    () => getCurrentPrayerWindow(times, now, tomorrowTimes.fajr),
+    [times, now, tomorrowTimes]
+  );
 
   return {
     entries,
     nextPrayer,
     tomorrowFajr,
     now,
+    times,
+    currentWindow,
   };
 }
