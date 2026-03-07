@@ -1,11 +1,26 @@
 import { Coordinates, PrayerTimes, CalculationMethod, Madhab } from 'adhan';
 import type { PrayerId } from '@/types';
+import { PRAYER_TIME_OFFSETS } from './local-adjustments';
+
+/** Apply manual minute offsets to adhan-computed times. */
+function applyOffsets(times: PrayerTimes): PrayerTimes {
+  for (const [prayer, minutes] of Object.entries(PRAYER_TIME_OFFSETS)) {
+    if (minutes && prayer in times) {
+      const key = prayer as keyof PrayerTimes;
+      const original = times[key];
+      if (original instanceof Date) {
+        (times as unknown as Record<string, unknown>)[prayer] = new Date(original.getTime() + minutes * 60_000);
+      }
+    }
+  }
+  return times;
+}
 
 export function getPrayerTimes(lat: number, lng: number, date: Date = new Date()) {
   const coordinates = new Coordinates(lat, lng);
   const params = CalculationMethod.MuslimWorldLeague();
-  params.madhab = Madhab.Hanafi;
-  return new PrayerTimes(coordinates, date, params);
+  params.madhab = Madhab.Shafi;
+  return applyOffsets(new PrayerTimes(coordinates, date, params));
 }
 
 export function formatTime(date: Date): string {

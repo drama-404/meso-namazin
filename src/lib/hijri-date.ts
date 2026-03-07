@@ -1,40 +1,23 @@
+import { getCurrentHijriDate as getHijri } from 'islamic-date';
+import { RAMADAN_DAY_OFFSET, RAMADAN_OFFSET_YEARS } from './local-adjustments';
+
 /**
- * Approximate Hijri date calculation using the Umm al-Qura-style algorithm.
- * Accurate enough for Ramadan detection (month 9) and day-of-month display.
+ * Hijri date using the islamic-date package (Umm Al-Qura calendar),
+ * with manual Ramadan day offset for the Albanian community.
  */
 export function getCurrentHijriDate(): { day: number; month: number; year: number } {
-  const now = new Date();
-  return gregorianToHijri(now);
-}
+  const result = getHijri({ calendarType: 'umm' });
+  let { day, month, year } = result;
 
-function gregorianToHijri(date: Date): { day: number; month: number; year: number } {
-  const gd = date.getDate();
-  const gm = date.getMonth() + 1; // 1-based
-  const gy = date.getFullYear();
-
-  // Julian Day Number
-  let jd =
-    Math.floor((1461 * (gy + 4800 + Math.floor((gm - 14) / 12))) / 4) +
-    Math.floor((367 * (gm - 2 - 12 * Math.floor((gm - 14) / 12))) / 12) -
-    Math.floor((3 * Math.floor((gy + 4900 + Math.floor((gm - 14) / 12)) / 100)) / 4) +
-    gd -
-    32075;
-
-  // Convert JD to Hijri
-  const l = jd - 1948440 + 10632;
-  const n = Math.floor((l - 1) / 10631);
-  const remainL = l - 10631 * n + 354;
-  const j =
-    Math.floor((10985 - remainL) / 5316) * Math.floor((50 * remainL) / 17719) +
-    Math.floor(remainL / 5670) * Math.floor((43 * remainL) / 15238);
-  const finalL =
-    remainL -
-    Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) -
-    Math.floor(j / 16) * Math.floor((15238 * j) / 43) +
-    29;
-  const month = Math.floor((24 * finalL) / 709);
-  const day = finalL - Math.floor((709 * month) / 24);
-  const year = 30 * n + j - 30;
+  // Apply Ramadan offset for specified years
+  if (month === 9 && RAMADAN_OFFSET_YEARS.includes(year)) {
+    day += RAMADAN_DAY_OFFSET;
+    if (day < 1) {
+      // Offset pushed before Ramadan — treat as not-yet-Ramadan (Sha'ban)
+      month = 8;
+      day = 30 + day; // e.g. day=0 → Sha'ban 30, day=-1 → Sha'ban 29
+    }
+  }
 
   return { day, month, year };
 }

@@ -8,7 +8,11 @@
       "Bash(grep -n \"activeSegmentIndex\\\\|segment-active\" /c/Users/Denada/Desktop/projects/meso-namazin/src/components/prayer-player/*.tsx)",
       "Bash(npm run build)",
       "Bash(npm install @phosphor-icons/react)",
-      "Bash(ls /c/Users/Denada/Desktop/projects/meso-namazin/public/illustrations/*woman*)"
+      "Bash(ls /c/Users/Denada/Desktop/projects/meso-namazin/public/illustrations/*woman*)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:dev.to)",
+      "Bash(npm install islamic-date)"
     ]
   }
 }

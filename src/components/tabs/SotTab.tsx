@@ -32,7 +32,11 @@ export default function SotTab() {
 
   const dateStr = `${now.getDate()} ${ALBANIAN_MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const dailyTip = DAILY_TIPS[now.getDate() % DAILY_TIPS.length];
-  const currentPrayerId = currentWindow && !currentWindow.isGap ? currentWindow.prayer : null;
+  const currentPrayerId = currentWindow
+    ? currentWindow.isGap
+      ? currentWindow.gapNextPrayer || null
+      : currentWindow.prayer
+    : null;
 
   const tomorrowFajrDate = useMemo(() => {
     if (tomorrowFajr) return tomorrowFajr.time;
@@ -69,19 +73,14 @@ export default function SotTab() {
     <div className="flex flex-col gap-4 pb-24 pt-2">
       {/* Section 1 — Today Banner */}
       <div className="mx-4">
-        {/* Location & Date */}
-        <div className="flex items-center justify-between text-[13px] text-[#6C6C70] mb-3">
-          <span>{state.settings.locationName}</span>
-          <span>{dateStr}</span>
-        </div>
-
         <div className="bg-white rounded-2xl card-shadow px-4 py-4">
           {currentWindow ? (
             <div className="flex items-center gap-4">
               {/* Left column — 30% */}
               <div className="w-[30%] flex-shrink-0">
+                <p className="text-[10px] text-[#6C6C70] mb-0.5">{dateStr}</p>
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-[#6C6C70]">
-                  {currentWindow.isGap ? 'Ardhshme' : 'Tani'}
+                  {currentWindow.isGap ? 'Namazi Tjetër' : 'Tani'}
                 </p>
                 <p className="text-xl font-bold text-[#1C1C1E] mt-0.5">
                   {currentWindow.isGap
@@ -89,7 +88,9 @@ export default function SotTab() {
                     : PRAYERS[currentWindow.prayer].name_sq}
                 </p>
                 <p className="text-xs text-[#6C6C70] mt-0.5">
-                  {formatTime(currentWindow.windowStart)} – {formatTime(currentWindow.windowEnd)}
+                  {currentWindow.isGap && times
+                    ? `${formatTime(times.dhuhr)} – ${formatTime(times.asr)}`
+                    : `${formatTime(currentWindow.windowStart)} – ${formatTime(currentWindow.windowEnd)}`}
                 </p>
               </div>
 
@@ -173,7 +174,6 @@ export default function SotTab() {
           {entries.map((entry, i) => {
             const isPracticed = currentProgress.practiced.includes(entry.id);
             const isCurrent = entry.id === currentPrayerId;
-            const isPast = !isCurrent && entry.time < now && !isPracticed;
 
             return (
               <button
@@ -192,9 +192,7 @@ export default function SotTab() {
                   <span className={`text-[15px] ${
                     isCurrent
                       ? 'font-semibold text-[#1B7A4A]'
-                      : isPast
-                        ? 'text-[#AEAEB2]'
-                        : 'text-[#1C1C1E] font-medium'
+                      : 'text-[#1C1C1E] font-medium'
                   }`}>
                     {entry.name_sq}
                   </span>
@@ -211,15 +209,13 @@ export default function SotTab() {
                       className="flex items-center gap-1 bg-[#1B7A4A] text-white text-xs font-semibold px-3 py-1.5 rounded-full"
                     >
                       <Play size={10} fill="currentColor" strokeWidth={0} />
-                      Fillo
+                      Praktiko
                     </motion.span>
                   )}
                   <span className={`text-sm tabular-nums w-10 text-right ${
                     isCurrent
                       ? 'font-semibold text-[#1B7A4A]'
-                      : isPast
-                        ? 'text-[#AEAEB2]'
-                        : 'text-[#1C1C1E] font-medium'
+                      : 'text-[#1C1C1E] font-medium'
                   }`}>
                     {entry.timeFormatted}
                   </span>
@@ -247,21 +243,19 @@ export default function SotTab() {
 
             {/* Two columns */}
             <div className="flex">
-              <div className="flex-1 flex flex-col items-center border-r border-[#8B7355]/15">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <SunHorizon size={14} weight="duotone" color="#8B7355" />
-                  <span className="text-[10px] uppercase tracking-wide text-[#6C6C70]">Syfyri</span>
+              <div className="flex-1 flex flex-col items-center border-r border-[#8B7355]/15 py-1">
+                <div className="flex items-center gap-1">
+                  <SunHorizon size={13} weight="duotone" color="#8B7355" />
+                  <span className="text-[10px] uppercase tracking-wide text-[#6C6C70]">Syfyri përfundon</span>
                 </div>
-                <span className="text-[10px] text-[#6C6C70]">përfundon</span>
-                <span className="text-xl font-bold text-[#1C1C1E]">{fajrEntry?.timeFormatted ?? '--:--'}</span>
+                <span className="text-lg font-bold text-[#1C1C1E] mt-0.5">{fajrEntry?.timeFormatted ?? '--:--'}</span>
               </div>
-              <div className="flex-1 flex flex-col items-center">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <Moon size={14} weight="duotone" color="#8B7355" />
-                  <span className="text-[10px] uppercase tracking-wide text-[#6C6C70]">Iftari</span>
+              <div className="flex-1 flex flex-col items-center py-1">
+                <div className="flex items-center gap-1">
+                  <Moon size={13} weight="duotone" color="#8B7355" />
+                  <span className="text-[10px] uppercase tracking-wide text-[#6C6C70]">Iftari fillon</span>
                 </div>
-                <span className="text-[10px] text-[#6C6C70]">fillon</span>
-                <span className="text-xl font-bold text-[#1C1C1E]">{maghribEntry?.timeFormatted ?? '--:--'}</span>
+                <span className="text-lg font-bold text-[#1C1C1E] mt-0.5">{maghribEntry?.timeFormatted ?? '--:--'}</span>
               </div>
             </div>
           </div>
