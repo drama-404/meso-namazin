@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
     "adhan": "^4.4.3",
     "framer-motion": "^12.34.4",
     "lucide-react": "^0.575.0",

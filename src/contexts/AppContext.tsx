@@ -25,7 +25,9 @@ const initialState: AppState = {
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'SET_TAB':
-      return { ...state, activeTab: action.tab };
+      return { ...state, activeTab: action.tab, tabDeepLink: action.deepLink ?? null };
+    case 'CLEAR_DEEP_LINK':
+      return { ...state, tabDeepLink: null };
     case 'UPDATE_SETTINGS':
       return { ...state, settings: { ...state.settings, ...action.settings } };
     case 'OPEN_PRAYER_PLAYER':

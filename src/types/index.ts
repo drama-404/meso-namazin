@@ -128,12 +128,15 @@ export interface OverlayState {
 
 export interface AppState {
   activeTab: TabId;
+  /** Deep-link into a specific sub-view when switching tabs */
+  tabDeepLink?: string | null;
   settings: AppSettings;
   overlays: OverlayState;
 }
 
 export type AppAction =
-  | { type: 'SET_TAB'; tab: TabId }
+  | { type: 'SET_TAB'; tab: TabId; deepLink?: string }
+  | { type: 'CLEAR_DEEP_LINK' }
   | { type: 'UPDATE_SETTINGS'; settings: Partial<AppSettings> }
   | { type: 'OPEN_PRAYER_PLAYER'; prayerId: PrayerId }
   | { type: 'CLOSE_PRAYER_PLAYER' }

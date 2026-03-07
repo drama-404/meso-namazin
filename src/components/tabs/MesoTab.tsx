@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, Lock, ArrowLeft, Droplets, HelpCircle, CheckSquare, ListOrdered, AlertTriangle, Brain, Play } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { LESSONS, LESSON_CONTENT, PREREQUISITES_LIST, WUDU_STEPS, WUDU_BREAKERS } from '@/data/lessons';
@@ -12,8 +12,16 @@ const ICON_MAP: Record<string, typeof HelpCircle> = {
 type ViewState = { type: 'list' } | { type: 'lesson'; lessonId: string };
 
 export default function MesoTab() {
+  const { state, dispatch } = useApp();
   const [view, setView] = useState<ViewState>({ type: 'list' });
-  const { dispatch } = useApp();
+
+  // Handle deep links from dock icons
+  useEffect(() => {
+    if (state.tabDeepLink && state.activeTab === 'meso') {
+      setView({ type: 'lesson', lessonId: state.tabDeepLink });
+      dispatch({ type: 'CLEAR_DEEP_LINK' });
+    }
+  }, [state.tabDeepLink, state.activeTab, dispatch]);
 
   if (view.type === 'lesson') {
     return (

@@ -134,11 +134,16 @@ export function getCurrentPrayerWindow(
     return { prayer: 'maghrib', windowStart: maghrib, windowEnd: isha, minutesRemaining: remaining(isha), isAsr: false, isGap: false };
   }
 
-  // Isha window: isha → midnight
-  if (now >= isha && now < midnight) {
-    return { prayer: 'isha', windowStart: isha, windowEnd: midnight, minutesRemaining: remaining(midnight), isAsr: false, isGap: false };
+  // Isha window: isha → tomorrow's fajr (valid opinion: isha extends until fajr)
+  const ishaEnd = tomorrowFajr ?? midnight;
+  if (now >= isha) {
+    return { prayer: 'isha', windowStart: isha, windowEnd: ishaEnd, minutesRemaining: remaining(ishaEnd), isAsr: false, isGap: false };
   }
 
-  // After midnight or before fajr — no window
+  // Before today's fajr — still in last night's isha window
+  if (now < fajr) {
+    return { prayer: 'isha', windowStart: isha, windowEnd: fajr, minutesRemaining: remaining(fajr), isAsr: false, isGap: false };
+  }
+
   return null;
 }

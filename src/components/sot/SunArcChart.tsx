@@ -20,7 +20,8 @@ const DRAW_W = W - 2 * PAD_X;
 // Arc geometry: sine wave — naturally flattens at both ends
 const PEAK_Y = 14;      // top of arc (SVG y, smaller = higher)
 const BASELINE_Y = 68;  // bottom of arc (endpoints where sin = 0)
-const ICON_OFFSET = 14; // how far below the dot each icon sits
+const ICON_OFFSET = 12; // how far below the dot each icon sits
+const ICON_SCALE = 1.25; // scale factor for icons (16×16 → 20×20)
 
 // y from x fraction using sin(x * π): 0 at edges, 1 at center
 function arcY(xFraction: number): number {
@@ -228,7 +229,16 @@ export default function SunArcChart({ prayerTimes, now, tomorrowFajr }: SunArcCh
       {POINT_ORDER.map((id) => {
         const p = SCREEN[id];
         const Icon = ICON_MAP[id];
-        return <Icon key={id} x={p.x} y={p.y} />;
+        const ix = p.x - 8; // icon origin before scale
+        const iy = p.y + ICON_OFFSET;
+        // Scale from icon center (8,8) within the 16×16 icon space
+        const cx = ix + 8;
+        const cy = iy + 8;
+        return (
+          <g key={id} transform={`translate(${cx},${cy}) scale(${ICON_SCALE}) translate(${-cx},${-cy})`}>
+            <Icon x={p.x} y={p.y} />
+          </g>
+        );
       })}
     </svg>
   );

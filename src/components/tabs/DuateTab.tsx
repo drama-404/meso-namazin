@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookOpen, Heart, Search, Lock, ArrowLeft, ChevronRight, Moon } from 'lucide-react';
+import { useApp } from '@/contexts/AppContext';
 import { SURAHS, FATIHA_SURAH } from '@/data/surahs';
 import { AFTER_PRAYER_DHIKR } from '@/data/dhikr';
 import { GLOSSARY } from '@/data/glossary';
@@ -15,8 +16,24 @@ type ViewState =
   | { type: 'dhikr' }
   | { type: 'glossary' };
 
+const DEEP_LINK_MAP: Record<string, ViewState> = {
+  dhikr: { type: 'dhikr' },
+  surahs: { type: 'surahs' },
+  glossary: { type: 'glossary' },
+};
+
 export default function DuateTab() {
+  const { state, dispatch } = useApp();
   const [view, setView] = useState<ViewState>({ type: 'main' });
+
+  // Handle deep links from dock icons
+  useEffect(() => {
+    if (state.tabDeepLink && state.activeTab === 'duate') {
+      const target = DEEP_LINK_MAP[state.tabDeepLink];
+      if (target) setView(target);
+      dispatch({ type: 'CLEAR_DEEP_LINK' });
+    }
+  }, [state.tabDeepLink, state.activeTab, dispatch]);
 
   if (view.type === 'surah') return <SurahDetail surah={view.surah} onBack={() => setView({ type: 'surahs' })} />;
   if (view.type === 'surahs') return <SurahsList onBack={() => setView({ type: 'main' })} onSelect={(s) => setView({ type: 'surah', surah: s })} />;
