@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Repeat2 } from 'lucide-react';
-import type { PrayerStep } from '@/types';
+import type { PrayerStep, Gender } from '@/types';
 import PostureIllustration from './PostureIllustration';
 
 interface StepSectionProps {
@@ -17,15 +17,18 @@ interface StepSectionProps {
   segmentRefOffset: number;
   onSegmentTap?: (stepIndex: number, segmentIndex: number) => void;
   surahSwitcher?: React.ReactNode;
+  gender?: Gender;
 }
 
-function SalamDualIllustration() {
+function SalamDualIllustration({ gender = 'male' }: { gender?: Gender }) {
+  const folder = gender === 'female' ? 'woman' : 'man';
+  const suffix = gender === 'female' ? 'woman' : 'man';
   return (
     <div className="flex items-center justify-center gap-3 w-full">
       <div className="flex-1 flex flex-col items-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/illustrations/man/09_salam_right_man.jpg"
+          src={`/illustrations/${folder}/09_salam_right_${suffix}.png`}
           alt="Salam djathtas"
           className="h-36 object-contain"
         />
@@ -34,7 +37,7 @@ function SalamDualIllustration() {
       <div className="flex-1 flex flex-col items-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/illustrations/man/10_salam_left_man.jpg"
+          src={`/illustrations/${folder}/10_salam_left_${suffix}.png`}
           alt="Salam majtas"
           className="h-36 object-contain"
         />
@@ -55,6 +58,7 @@ function StepSectionInner({
   segmentRefOffset,
   onSegmentTap,
   surahSwitcher,
+  gender = 'male',
 }: StepSectionProps) {
   const repeatFrom = step.repeat_from_segment ?? 0;
   const hasRepeat = step.repeat && step.repeat > 1;
@@ -83,7 +87,7 @@ function StepSectionInner({
       <div className="bg-white px-4 py-5">
         {/* Posture Illustration */}
         <div className="mb-3 flex justify-center">
-          {isSalam ? <SalamDualIllustration /> : <PostureIllustration type={step.type} />}
+          {isSalam ? <SalamDualIllustration gender={gender} /> : <PostureIllustration type={step.type} gender={gender} />}
         </div>
 
         {/* Instruction text */}

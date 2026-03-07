@@ -7,7 +7,8 @@
       "Bash(timeout 15 npx next dev --port 3000)",
       "Bash(grep -n \"activeSegmentIndex\\\\|segment-active\" /c/Users/Denada/Desktop/projects/meso-namazin/src/components/prayer-player/*.tsx)",
       "Bash(npm run build)",
-      "Bash(npm install @phosphor-icons/react)"
+      "Bash(npm install @phosphor-icons/react)",
+      "Bash(ls /c/Users/Denada/Desktop/projects/meso-namazin/public/illustrations/*woman*)"
     ]
   }
 }

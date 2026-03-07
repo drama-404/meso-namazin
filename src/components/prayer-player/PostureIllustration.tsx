@@ -4,17 +4,17 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 const ILLUSTRATION_MAP: Record<string, { male: string; female: string }> = {
-  'standing':              { male: '01_standing_niyyah_man.jpg',        female: '01_standing_niyyah_man.jpg' },
-  'standing_hands_raised': { male: '02_standing_takbeer_man.jpg',       female: '02_standing_takbeer_man.jpg' },
-  'standing_hands_folded': { male: '03_standing_qiyam_man.jpg',         female: '03_standing_qiyam_man.jpg' },
-  'bowing':                { male: '04_bowing_ruku_man.jpg',            female: '04_bowing_ruku_man.jpg' },
-  'standing_after_ruku':   { male: '05_standing_after_ruku_man.jpg',    female: '05_standing_after_ruku_man.jpg' },
-  'prostrating':           { male: '06_prostration_sujud_man.jpg',      female: '06_prostration_sujud_man.jpg' },
-  'sitting':               { male: '07_sitting_between_sujood_man.jpeg', female: '07_sitting_between_sujood_man.jpeg' },
-  'sitting_tashahhud':     { male: '08_standing_tashahud_man.jpg',      female: '08_standing_tashahud_man.jpg' },
-  'salam':                 { male: '09_salam_right_man.jpg',            female: '09_salam_right_man.jpg' },
-  'salam_right':           { male: '09_salam_right_man.jpg',            female: '09_salam_right_man.jpg' },
-  'salam_left':            { male: '10_salam_left_man.jpg',             female: '10_salam_left_man.jpg' },
+  'standing':              { male: '01_standing_niyyah_man.png',        female: '01_standing_niyyah_woman.png' },
+  'standing_hands_raised': { male: '02_standing_takbeer_man.png',       female: '02_standing_takbeer_woman.png' },
+  'standing_hands_folded': { male: '03_standing_qiyam_man.png',         female: '03_standing_qiyam_woman.png' },
+  'bowing':                { male: '04_bowing_ruku_man.png',            female: '04_bowing_ruku_woman.png' },
+  'standing_after_ruku':   { male: '05_standing_after_ruku_man.png',    female: '05_standing_after_ruku_woman.png' },
+  'prostrating':           { male: '06_prostration_sujud_man.png',      female: '06_prostration_sujud_woman.png' },
+  'sitting':               { male: '07_sitting_between_sujood_man.png', female: '07_sitting_between_sujood_woman.png' },
+  'sitting_tashahhud':     { male: '07_sitting_between_sujood_man.png', female: '07_sitting_between_sujood_woman.png' },
+  'salam':                 { male: '09_salam_right_man.png',            female: '09_salam_right_woman.png' },
+  'salam_right':           { male: '09_salam_right_man.png',            female: '09_salam_right_woman.png' },
+  'salam_left':            { male: '10_salam_left_man.png',             female: '10_salam_left_woman.png' },
 };
 
 // Minimal SVG fallback silhouette
@@ -37,6 +37,7 @@ export default function PostureIllustration({ type, gender = 'male' }: { type: s
   const [hasError, setHasError] = useState(false);
   const entry = ILLUSTRATION_MAP[type] ?? ILLUSTRATION_MAP['standing'];
   const filename = gender === 'female' ? entry.female : entry.male;
+  const folder = gender === 'female' ? 'woman' : 'man';
 
   return (
     <div className="relative w-full h-48 flex items-center justify-center overflow-visible">
@@ -44,7 +45,7 @@ export default function PostureIllustration({ type, gender = 'male' }: { type: s
         <FallbackSilhouette />
       ) : (
         <Image
-          src={`/illustrations/man/${filename}`}
+          src={`/illustrations/${folder}/${filename}`}
           alt={type}
           width={200}
           height={200}

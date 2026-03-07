@@ -281,6 +281,7 @@ export default function PrayerPlayer() {
                       segmentRefs={segmentRefs}
                       segmentRefOffset={segmentOffsets[idx] || 0}
                       onSegmentTap={handleSegmentTap}
+                      gender={state.settings.gender}
                       surahSwitcher={
                         step.has_surah_switcher ? (
                           <SurahSwitcher
